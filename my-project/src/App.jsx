@@ -71,7 +71,9 @@ const Hero = () => {
         </div>
         <div className="flex space-x-4 pt-6">
           <Button primary>Hire Me</Button>
-          <Button>Download CV</Button>
+          <a href="/cv.pdf" download>
+            <Button>Download CV</Button>
+          </a>
         </div>
         
         {/* Stats Card */}
@@ -189,7 +191,9 @@ I work mainly with React, Node.js, and modern web technologies to create clean a
   ))}
 </div>
 
-          <Button primary>Download CV</Button>
+          <a href="/cv.pdf" download>
+  <Button primary>Download CV</Button>
+</a>
         </div>
       </div>
     </section>
