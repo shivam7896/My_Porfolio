@@ -1,60 +1,176 @@
 @import "tailwindcss";
 
-*{
-    scroll-behavior: smooth;
+@layer base {
+  :root {
+    --font-display: 'Clash Display', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --accent: #FF5E1E;
+    --accent-glow: rgba(255, 94, 30, 0.25);
+    --bg-dark: #08090D;
+    --bg-card: #11131A;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+  }
+
+  html {
+    font-family: var(--font-body);
+    background-color: var(--bg-dark);
+    color: #F3F4F6;
+    scroll-behavior: auto; /* Handled smoothly by Lenis */
+  }
+
+  body {
+    overflow-x: hidden;
+    position: relative;
+    background-color: var(--bg-dark);
+  }
 }
 
-@keyframes marquee {
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #08090D;
+}
+::-webkit-scrollbar-thumb {
+  background: #252836;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF5E1E;
+}
+
+/* Lenis Recommended CSS */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis [data-lenis-prevent],
+.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Subtle Ambient Overlay */
+.bg-grain {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Typography Helpers */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+.font-body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-mono-tech {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Text Mask Reveals */
+.text-mask {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.text-mask-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  will-change: transform, opacity;
+}
+
+/* Dynamic Velocity Blur Target */
+.velocity-blur-target {
+  will-change: auto;
+}
+
+/* Stacking Project Cards Setup */
+.stacked-card {
+  transform-origin: center top;
+}
+
+/* Marquee Animations */
+@keyframes marquee-scroll {
   0% {
-    transform: translateX(0);
+    transform: translateX(0%);
   }
   100% {
     transform: translateX(-50%);
   }
 }
 
-.marquee {
+.marquee-track {
   display: flex;
-  width: fit-content; /* IMPORTANT */
-  animation: marquee 20s linear infinite;
+  width: max-content;
+  animation: marquee-scroll 24s linear infinite;
+  will-change: transform;
 }
 
-.marquee:hover {
+.marquee-track:hover {
   animation-play-state: paused;
 }
-.marquee-container {
-  position: relative;
-  overflow: hidden;
+
+/* Glass & Card Treatments */
+.editorial-card {
+  background: linear-gradient(135deg, rgba(25, 28, 38, 0.75) 0%, rgba(13, 15, 22, 0.85) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.marquee-container::before,
-.marquee-container::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 100px;
-  height: 100%;
-  z-index: 2;
+.editorial-card:hover {
+  border-color: rgba(255, 94, 30, 0.4);
 }
 
-.marquee-container::before {
-  left: 0;
-  background: linear-gradient(to right, #1a1a1a, transparent);
+/* Glowing Accent Line */
+.accent-glow-line {
+  background: linear-gradient(90deg, transparent, #FF5E1E, transparent);
 }
 
-.marquee-container::after {
-  right: 0;
-  background: linear-gradient(to left, #1a1a1a, transparent);
+/* Custom Cursor styling (desktop only) */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: default;
+  }
+  
+  .custom-cursor-follower {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    mix-blend-mode: normal;
+    will-change: transform;
+    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  }
 }
 
-@keyframes shakeLoop {
-  0%, 90%, 100% { transform: translateX(0); }
-  92% { transform: translateX(-3px); }
-  94% { transform: translateX(3px); }
-  96% { transform: translateX(-3px); }
-  98% { transform: translateX(3px); }
-}
-
-.shake-btn {
-  animation: shakeLoop 3s infinite;
+/* Reduced Motion Respect */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .velocity-blur-target {
+    filter: none !important;
+    transform: none !important;
+  }
 }
